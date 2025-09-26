@@ -21,8 +21,8 @@ def scanLine4e(f,l,loc):
 [1 point] Read the image “Baboon.png”, convert it to a grayscale image and get a
 horizontal intensity scan line in the middle of the image, and plot the scan line.
 '''
-#plt.plot(scanLine4e(cv2.cvtColor(baboon, cv2.COLOR_BGR2GRAY), int(baboon.shape[0]/2), 'row'))
-#plt.show()
+plt.plot(scanLine4e(cv2.cvtColor(baboon, cv2.COLOR_BGR2GRAY), int(baboon.shape[0]/2), 'row'))
+plt.show()
 
 
 '''
@@ -47,5 +47,24 @@ image.
 '''
 
 baboon_gray = cv2.imread('images/BaboonGray.png')
-plt.imshow(baboon_gray)
+baboon_gray = cv2.cvtColor(baboon_gray, cv2.COLOR_BGR2GRAY)
+
+M = int(baboon_gray.shape[0])
+N = int(baboon_gray.shape[1])
+
+baboon_mask = mask4e(M,N,int(M/4),int(N/4),int(3*M/4)-1,int(3*N/4)-1)
+
+'''
+[0.5 point] Confirm that the number of the 1-valued elements in the mask is correct.
+'''
+
+assert(np.count_nonzero(baboon_mask) == int(M*N/4))
+
+'''
+[0.5 point] Apply your mask to image “BaboonGray.jpg” and display your result
+'''
+
+masked_baboon = cv2.bitwise_and(baboon_gray, baboon_gray, mask=baboon_mask)
+
+plt.imshow(masked_baboon, cmap='gray')
 plt.show()
